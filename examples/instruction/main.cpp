@@ -6,13 +6,13 @@ int main()
 {
     bvm::Executer::InstructionManager manager;
     manager
-        .add_instructions(0, bvm::Executer::InstructionContainer{
-                                 bvm::Executer::Instruction(),
-                                 bvm::Executer::Instruction(),
-                                 bvm::Executer::Instruction(),
-                             });
+        .add_item(0, bvm::Executer::InstructionContainer{
+                         bvm::Executer::Instruction(),
+                         bvm::Executer::Instruction(),
+                         bvm::Executer::Instruction(),
+                     });
 
-    std::cout << ntl::serialize(manager.get_instructions(0).at(0)) << std::endl;
+    std::cout << ntl::serialize(manager[0].at(0)) << std::endl;
 
     return 0;
 }
