@@ -4,9 +4,9 @@
 
 int main()
 {
-    bvm::Executer::MemoryManager manager;
+    bvm::MemoryManager manager;
 
-    bvm::Executer::Memory mem(8);
+    bvm::Memory mem(8);
     mem.get<int>(0) = 666;
     mem.get<int>(4) = 999;
     manager.add_item(0, mem);

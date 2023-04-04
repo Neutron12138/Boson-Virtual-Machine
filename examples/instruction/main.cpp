@@ -4,12 +4,12 @@
 
 int main()
 {
-    bvm::Executer::InstructionManager manager;
+    bvm::InstructionManager manager;
     manager
-        .add_item(0, bvm::Executer::InstructionContainer{
-                         bvm::Executer::Instruction(),
-                         bvm::Executer::Instruction(),
-                         bvm::Executer::Instruction(),
+        .add_item(0, bvm::InstructionContainer{
+                         bvm::Instruction(),
+                         bvm::Instruction(),
+                         bvm::Instruction(),
                      });
 
     std::cout << ntl::serialize(manager[0].at(0)) << std::endl;
