@@ -1,5 +1,0 @@
-#ifndef __BOSONVM_EXECUTER_FUNCTION_HPP__
-#define __BOSONVM_EXECUTER_FUNCTION_HPP__
-
-
-#endif
