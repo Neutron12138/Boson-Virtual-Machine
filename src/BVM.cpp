@@ -11,7 +11,6 @@
 #include "Instruction/Instruction.cpp"
 #include "Instruction/BasicFunction.cpp"
 #include "Instruction/Function.cpp"
-#include "Instruction/NativeCallback.cpp"
 #include "Instruction/DefaultNativeCallbacks.cpp"
 
 #include "Memory/Memory.cpp"

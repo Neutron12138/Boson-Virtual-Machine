@@ -30,11 +30,17 @@ namespace bvm
         /// @brief 将值从temp stack出栈并保存到内存中
         static const EnumType Store = EnumType(3);
 
-        /// @brief 将temp stack的栈顶替换
-        static const EnumType Move = EnumType(4);
+        /// @brief 将值移到temp stack栈顶，rax为偏移，rbx为值
+        static const EnumType MoveToTemp = EnumType(4);
 
         /// @brief 调用本地代码
         static const EnumType NativeCall = EnumType(5);
+
+        /// @brief 新建临时变量到temp stack
+        static const EnumType MakeTemp = EnumType(6);
+
+        /// @brief 将值移动到寄存器
+        static const EnumType MoveToRegister = EnumType(7);
 
         /// @brief 序列化映射表
         static const SerializatingMap serializating_map = SerializatingMap{
@@ -55,8 +61,8 @@ namespace bvm
                 NTL_STRING("Store")),
 
             SerializatingMap::value_type(
-                Move,
-                NTL_STRING("Move")),
+                MoveToTemp,
+                NTL_STRING("Move To Temp")),
 
             SerializatingMap::value_type(
                 NativeCall,
@@ -82,8 +88,8 @@ namespace bvm
                 Store),
 
             DeserializatingMap::value_type(
-                NTL_STRING("Move"),
-                Move),
+                NTL_STRING("MoveToTemp"),
+                MoveToTemp),
 
             DeserializatingMap::value_type(
                 NTL_STRING("Native Call"),

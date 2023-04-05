@@ -42,6 +42,9 @@ namespace bvm
         /// @brief 全局存储区
         GlobalMemory m_global_memory;
 
+        /// @brief 调用参数
+        FunctionArguments m_call_arguments;
+
         /// @brief 状态
         Status m_status = Status::Stopped;
 
@@ -61,6 +64,7 @@ namespace bvm
         const NativeCallbackManager &get_native_manager() const;
         const FunctionCallStack &get_call_stack() const;
         const GlobalMemory &get_global_memory() const;
+        const FunctionArguments &get_call_arguments() const;
         Status get_status() const;
 
         bool is_call_stack_empty() const;
@@ -81,7 +85,7 @@ namespace bvm
         /// @param callback 回调
         /// @return 本对象
         SelfType &add_function(ntl::SizeT index,
-                               const NativeCallback &callback);
+                               NativeCallback callback);
 
         /// @brief 调用一个函数
         /// @param index 函数索引
@@ -116,7 +120,7 @@ namespace bvm
         /// @return 本对象
         SelfType &stop();
 
-    public:
+    protected:
         virtual void execute_none(const Instruction &instruction);
         virtual void execute_load(const Instruction &instruction);
         virtual void execute_remove(const Instruction &instruction);

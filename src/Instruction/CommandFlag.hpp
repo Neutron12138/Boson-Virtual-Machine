@@ -9,7 +9,7 @@ namespace bvm
     namespace CommandFlag
     {
         /// @brief 枚举类型
-        using EnumType = ntl::BasicEnumeration<ntl::Int32>;
+        using EnumType = ntl::BasicEnumeration<ntl::Int16>;
 
         /// @brief 序列化映射表
         using SerializatingMap = std::map<EnumType, ntl::Serialization>;
@@ -31,6 +31,18 @@ namespace bvm
 
         /// @brief 以四字模式操作
         static const EnumType QWord = EnumType(4);
+
+        /// @brief AX寄存器
+        static const EnumType RAX = EnumType(0);
+
+        /// @brief BX寄存器
+        static const EnumType RBX = EnumType(1);
+
+        /// @brief CX寄存器
+        static const EnumType RCX = EnumType(2);
+
+        /// @brief DX寄存器
+        static const EnumType RDX = EnumType(3);
 
         /// @brief 序列化映射表
         static const SerializatingMap serializating_map = SerializatingMap{

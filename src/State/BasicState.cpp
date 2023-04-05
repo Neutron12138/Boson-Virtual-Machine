@@ -39,6 +39,12 @@ namespace bvm
         return m_global_memory;
     }
 
+    const FunctionArguments &
+    BasicState::get_call_arguments() const
+    {
+        return m_call_arguments;
+    }
+
     BasicState::Status
     BasicState::get_status() const
     {
@@ -75,7 +81,7 @@ namespace bvm
     typename BasicState::SelfType &
     BasicState::add_function(
         ntl::SizeT index,
-        const NativeCallback &callback)
+        NativeCallback callback)
     {
         m_native_manager.add_item(index, callback);
         return *this;
@@ -179,6 +185,8 @@ namespace bvm
     BasicState::execute_native_call(
         const Instruction &instruction)
     {
+        m_native_manager.get_item(instruction.argument)(*this, m_call_arguments);
+        m_call_arguments.clear();
     }
 
 } // namespace bvm
