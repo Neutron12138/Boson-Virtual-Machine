@@ -4,6 +4,7 @@
 #include <vector>
 #include <ntl/NTL.hpp>
 #include "../Misc/IndexedManager.hpp"
+#include "../Misc/AccessableStack.hpp"
 
 namespace bvm
 {
@@ -71,8 +72,17 @@ namespace bvm
     /// @brief 内存管理器
     using MemoryManager = IndexedManager<Memory>;
 
+    /// @brief 内存栈
+    using MemoryStack = AccessableStack<Memory>;
+
     /// @brief 堆
     using Heap = MemoryManager;
+
+    /// @brief 缓存栈
+    using TempStack = MemoryStack;
+
+    /// @brief 函数参数
+    using FunctionArguments = MemoryStack;
 
 } // namespace bvm
 

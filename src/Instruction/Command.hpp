@@ -16,7 +16,7 @@ namespace bvm
         using SerializatingMap = std::map<EnumType, ntl::Serialization>;
 
         /// @brief 反序列化映射表
-        using DeserializatingMap = std::map<ntl::Serialization, EnumType>;
+        using DeserializatingMap = std::map<ntl::String, EnumType>;
 
         /// @brief 无操作
         static const EnumType None = EnumType(0);
@@ -32,6 +32,9 @@ namespace bvm
 
         /// @brief 将temp stack的栈顶替换
         static const EnumType Move = EnumType(4);
+
+        /// @brief 调用本地代码
+        static const EnumType NativeCall = EnumType(5);
 
         /// @brief 序列化映射表
         static const SerializatingMap serializating_map = SerializatingMap{
@@ -54,29 +57,37 @@ namespace bvm
             SerializatingMap::value_type(
                 Move,
                 NTL_STRING("Move")),
+
+            SerializatingMap::value_type(
+                NativeCall,
+                NTL_STRING("Native Call")),
         };
 
         /// @brief 反序列化映射表
         static const DeserializatingMap deserializating_map = DeserializatingMap{
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("None"),
                 None),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Load"),
                 Load),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Remove"),
                 Remove),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Store"),
                 Store),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Move"),
                 Move),
+
+            DeserializatingMap::value_type(
+                NTL_STRING("Native Call"),
+                NativeCall),
         };
 
     } // namespace Command

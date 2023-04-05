@@ -15,7 +15,7 @@ namespace bvm
         using SerializatingMap = std::map<EnumType, ntl::Serialization>;
 
         /// @brief 反序列化映射表
-        using DeserializatingMap = std::map<ntl::Serialization, EnumType>;
+        using DeserializatingMap = std::map<ntl::String, EnumType>;
 
         /// @brief 无
         static const EnumType None = EnumType(0);
@@ -57,23 +57,23 @@ namespace bvm
 
         /// @brief 反序列化映射表
         static const DeserializatingMap deserializating_map = DeserializatingMap{
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("None"),
                 None),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Byte"),
                 Byte),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("Word"),
                 Word),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("DWord"),
                 DWord),
 
-            SerializatingMap::value_type(
+            DeserializatingMap::value_type(
                 NTL_STRING("QWord"),
                 QWord),
         };

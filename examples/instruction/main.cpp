@@ -12,7 +12,9 @@ int main()
                          bvm::Instruction(),
                      });
 
-    std::cout << ntl::serialize(manager[0].at(0)) << std::endl;
+    bvm::Function func(manager[0]);
+    for (; !func.is_end(); func.forward())
+        std::cout << ntl::serialize(func.get_instruction()) << std::endl;
 
     return 0;
 }
