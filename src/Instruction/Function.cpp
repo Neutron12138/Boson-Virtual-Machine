@@ -71,15 +71,14 @@ namespace bvm
     typename Function::SelfType &
     Function::forward(ntl::SizeT offset)
     {
-        m_position += offset;
+        m_position -= offset;
         return *this;
     }
 
     typename Function::SelfType &
     Function::backward(ntl::SizeT offset)
     {
-
-        m_position -= offset;
+        m_position += offset;
         return *this;
     }
 

@@ -3,7 +3,8 @@
 
 #include <ntl/NTL.hpp>
 #include "Memory.hpp"
-#include "Register.hpp"
+#include "Registers.hpp"
+#include "Uniform.hpp"
 
 namespace bvm
 {
@@ -28,7 +29,10 @@ namespace bvm
         MemoryStack global_stack;
 
         /// @brief 寄存器
-        Register registers;
+        Registers registers;
+
+        /// @brief 统一变量
+        UniformManager uniforms;
 
     public:
         GlobalMemory() = default;

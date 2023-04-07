@@ -51,7 +51,7 @@ namespace bvm
     public:
         const Instruction &get_instruction() const;
         SelfType &forward(ntl::SizeT offset = 1);
-        SelfType &backward(ntl::SizeT offset);
+        SelfType &backward(ntl::SizeT offset = 1);
     };
 
     /// @brief 函数调用栈

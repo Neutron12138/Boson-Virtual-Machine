@@ -5,6 +5,7 @@
 
 #include "Misc/IndexedManager.hpp"
 #include "Misc/AccessableStack.hpp"
+#include "Misc/EnumUtils.hpp"
 
 #include "Instruction/Command.hpp"
 #include "Instruction/CommandFlag.hpp"
@@ -15,7 +16,8 @@
 #include "Instruction/DefaultNativeCallbacks.hpp"
 
 #include "Memory/Memory.hpp"
-#include "Memory/Register.hpp"
+#include "Memory/Registers.hpp"
+#include "Memory/Uniform.hpp"
 #include "Memory/GlobalMemory.hpp"
 
 #include "State/BasicState.hpp"

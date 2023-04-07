@@ -14,6 +14,7 @@
 #include "Instruction/DefaultNativeCallbacks.cpp"
 
 #include "Memory/Memory.cpp"
+#include "Memory/Uniform.cpp"
 
 #include "State/BasicState.cpp"
 

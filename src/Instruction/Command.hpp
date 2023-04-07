@@ -3,6 +3,7 @@
 
 #include <map>
 #include <ntl/NTL.hpp>
+#include "../Misc/EnumUtils.hpp"
 
 namespace bvm
 {
@@ -18,6 +19,10 @@ namespace bvm
         /// @brief 反序列化映射表
         using DeserializatingMap = std::map<ntl::String, EnumType>;
 
+        //
+        //
+        //
+
         /// @brief 无操作
         static const EnumType None = EnumType(0);
 
@@ -30,8 +35,8 @@ namespace bvm
         /// @brief 将值从temp stack出栈并保存到内存中
         static const EnumType Store = EnumType(3);
 
-        /// @brief 将值移到temp stack栈顶，rax为偏移，rbx为值
-        static const EnumType MoveToTemp = EnumType(4);
+        /// @brief 将值移到temp stack栈顶
+        static const EnumType Move = EnumType(4);
 
         /// @brief 调用本地代码
         static const EnumType NativeCall = EnumType(5);
@@ -39,61 +44,34 @@ namespace bvm
         /// @brief 新建临时变量到temp stack
         static const EnumType MakeTemp = EnumType(6);
 
-        /// @brief 将值移动到寄存器
-        static const EnumType MoveToRegister = EnumType(7);
+        //
+        //
+        //
 
         /// @brief 序列化映射表
         static const SerializatingMap serializating_map = SerializatingMap{
-            SerializatingMap::value_type(
-                None,
-                NTL_STRING("None")),
-
-            SerializatingMap::value_type(
-                Load,
-                NTL_STRING("Load")),
-
-            SerializatingMap::value_type(
-                Remove,
-                NTL_STRING("Remove")),
-
-            SerializatingMap::value_type(
-                Store,
-                NTL_STRING("Store")),
-
-            SerializatingMap::value_type(
-                MoveToTemp,
-                NTL_STRING("Move To Temp")),
-
-            SerializatingMap::value_type(
-                NativeCall,
-                NTL_STRING("Native Call")),
+            BVM_ENUM_SERIALIZE(None),
+            BVM_ENUM_SERIALIZE(Load),
+            BVM_ENUM_SERIALIZE(Remove),
+            BVM_ENUM_SERIALIZE(Store),
+            BVM_ENUM_SERIALIZE(Move),
+            BVM_ENUM_SERIALIZE(NativeCall),
+            BVM_ENUM_SERIALIZE(MakeTemp),
         };
+
+        //
+        //
+        //
 
         /// @brief 反序列化映射表
         static const DeserializatingMap deserializating_map = DeserializatingMap{
-            DeserializatingMap::value_type(
-                NTL_STRING("None"),
-                None),
-
-            DeserializatingMap::value_type(
-                NTL_STRING("Load"),
-                Load),
-
-            DeserializatingMap::value_type(
-                NTL_STRING("Remove"),
-                Remove),
-
-            DeserializatingMap::value_type(
-                NTL_STRING("Store"),
-                Store),
-
-            DeserializatingMap::value_type(
-                NTL_STRING("MoveToTemp"),
-                MoveToTemp),
-
-            DeserializatingMap::value_type(
-                NTL_STRING("Native Call"),
-                NativeCall),
+            BVM_ENUM_DESERIALIZE(None),
+            BVM_ENUM_DESERIALIZE(Load),
+            BVM_ENUM_DESERIALIZE(Remove),
+            BVM_ENUM_DESERIALIZE(Store),
+            BVM_ENUM_DESERIALIZE(Move),
+            BVM_ENUM_DESERIALIZE(NativeCall),
+            BVM_ENUM_DESERIALIZE(MakeTemp),
         };
 
     } // namespace Command

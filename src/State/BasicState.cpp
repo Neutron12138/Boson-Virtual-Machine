@@ -63,7 +63,7 @@ namespace bvm
         return m_global_memory.global_stack;
     }
 
-    Register &
+    Registers &
     BasicState::get_registers()
     {
         return m_global_memory.registers;
@@ -101,11 +101,11 @@ namespace bvm
 
     typename BasicState::SelfType &
     BasicState::abort_current_function(
-        std::optional<ntl::SizeT> result)
+        std::optional<ntl::Int64> result)
     {
         m_call_stack.pop();
         if (result.has_value())
-            m_global_memory.registers.rax = *result;
+            m_global_memory.registers.rax.qword = *result;
         return *this;
     }
 

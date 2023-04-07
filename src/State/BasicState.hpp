@@ -25,6 +25,9 @@ namespace bvm
             /// @brief 运行中
             Running,
 
+            /// @brief 等待中
+            Waiting,
+
             /// @brief 终止的
             Aborted,
         };
@@ -70,7 +73,7 @@ namespace bvm
         bool is_call_stack_empty() const;
 
         FunctionArguments &get_global_stack();
-        Register &get_registers();
+        Registers &get_registers();
 
     public:
         /// @brief 添加一个函数
@@ -97,7 +100,7 @@ namespace bvm
         /// @brief 中止当前函数
         /// @param result 返回值（如果当前函数需要，留空则不会返回）
         /// @return 本对象
-        SelfType &abort_current_function(std::optional<ntl::SizeT> result);
+        SelfType &abort_current_function(std::optional<ntl::Int64> result);
 
         /// @brief 中止本状态
         /// @return 本对象
