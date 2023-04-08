@@ -7,10 +7,10 @@ namespace bvm
 {
     namespace DefaultNativeCallbacks
     {
-        
-    } // namespace DefaultNativeCallbacks
-    
-} // namespace bvm
+        void print(BasicState &state, const FunctionArguments &arguments);
 
+    } // namespace DefaultNativeCallbacks
+
+} // namespace bvm
 
 #endif

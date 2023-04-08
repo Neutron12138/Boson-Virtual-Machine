@@ -44,6 +44,12 @@ namespace bvm
         /// @brief 新建临时变量到temp stack
         static const EnumType MakeTemp = EnumType(6);
 
+        /// @brief 调用一个函数
+        static const EnumType Call = EnumType(7);
+
+        /// @brief 添加一个函数调用参数
+        static const EnumType CallPush = EnumType(8);
+
         //
         //
         //
@@ -57,6 +63,8 @@ namespace bvm
             BVM_ENUM_SERIALIZE(Move),
             BVM_ENUM_SERIALIZE(NativeCall),
             BVM_ENUM_SERIALIZE(MakeTemp),
+            BVM_ENUM_SERIALIZE(Call),
+            BVM_ENUM_SERIALIZE(CallPush),
         };
 
         //
@@ -72,6 +80,8 @@ namespace bvm
             BVM_ENUM_DESERIALIZE(Move),
             BVM_ENUM_DESERIALIZE(NativeCall),
             BVM_ENUM_DESERIALIZE(MakeTemp),
+            BVM_ENUM_DESERIALIZE(Call),
+            BVM_ENUM_DESERIALIZE(CallPush),
         };
 
     } // namespace Command

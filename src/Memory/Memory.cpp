@@ -1,6 +1,7 @@
 #ifndef __BOSONVM_MEMORY_MEMORY_CPP__
 #define __BOSONVM_MEMORY_MEMORY_CPP__
 
+#include <iostream>
 #include "Memory.hpp"
 
 namespace bvm
@@ -12,6 +13,12 @@ namespace bvm
     Memory::Memory(
         const MemoryHolder &holder)
         : m_holder(holder) {}
+
+    template <typename IteratorType>
+    Memory::Memory(
+        const IteratorType &begin,
+        const IteratorType &end)
+        : m_holder(begin, end) {}
 
     ntl::SizeT
     Memory::get_size() const
@@ -51,7 +58,7 @@ namespace bvm
     Memory::get(
         ntl::SizeT offset) const
     {
-        return *reinterpret_cast<ReturnType *>(
+        return *reinterpret_cast<const ReturnType *>(
             &m_holder.at(offset));
     }
 
@@ -60,6 +67,15 @@ namespace bvm
         const MemoryHolder &holder)
     {
         m_holder = holder;
+        return *this;
+    }
+
+    template <typename DataType>
+    typename Memory::SelfType &
+    Memory::set(
+        const DataType &data)
+    {
+        memcpy(m_holder.data(), &data, sizeof(data));
         return *this;
     }
 

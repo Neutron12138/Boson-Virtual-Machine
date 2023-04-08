@@ -6,6 +6,7 @@
 #include "Command.hpp"
 #include "CommandFlag.hpp"
 #include "../Misc/IndexedManager.hpp"
+#include "../Memory/Value.hpp"
 
 namespace bvm
 {
@@ -27,19 +28,19 @@ namespace bvm
         CommandFlag::EnumType flag1 = CommandFlag::None;
 
         /// @brief 参数
-        ntl::Int64 argument = 0;
+        Value argument = 0;
 
     public:
         constexpr Instruction() = default;
         explicit Instruction(Command::EnumType a_command,
-                             ntl::Int64 argument = 0);
+                             const Value &argument = 0);
         explicit Instruction(Command::EnumType a_command,
                              CommandFlag::EnumType a_flag0,
-                             ntl::Int64 argument = 0);
+                             const Value &argument = 0);
         explicit Instruction(Command::EnumType a_command,
                              CommandFlag::EnumType a_flag0,
                              CommandFlag::EnumType a_flag1,
-                             ntl::Int64 argument = 0);
+                             const Value &argument = 0);
         constexpr explicit Instruction(const SelfType &from) = default;
         ~Instruction() = default;
 

@@ -2,6 +2,7 @@
 #define __BOSONVM_MEMORY_REGISTER_HPP__
 
 #include <ntl/NTL.hpp>
+#include "Value.hpp"
 
 namespace bvm
 {
@@ -12,36 +13,11 @@ namespace bvm
         using SelfType = Registers;
         using ParentType = ntl::Object;
 
-        /// @brief 寄存器
-        struct NTL_ALIGN Register : public ntl::BasicObject
-        {
-        public:
-            using SelfType = Register;
-            using ParentType = ntl::BasicObject;
-
-        public:
-            union
-            {
-                ntl::Int8 byte;
-                ntl::Int16 word;
-                ntl::Int32 dword;
-                ntl::Int64 qword;
-            };
-
-        public:
-            Register() = default;
-            explicit Register(const SelfType &from) = default;
-            ~Register() = default;
-
-        public:
-            SelfType &operator=(const SelfType &from) = default;
-        };
-
     public:
-        Register rax;
-        Register rbx;
-        Register rcx;
-        Register rdx;
+        Value rax;
+        Value rbx;
+        Value rcx;
+        Value rdx;
 
     public:
         Registers() = default;

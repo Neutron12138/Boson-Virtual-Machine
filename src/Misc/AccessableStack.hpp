@@ -27,7 +27,10 @@ namespace bvm
 
     public:
         AccessableStack() = default;
-        explicit AccessableStack(const ItemContainer &container);
+        template <typename AnotherAllocatorType>
+        explicit AccessableStack(const std::vector<ItemType, AnotherAllocatorType> &container);
+        template <typename AnotherAllocatorType>
+        explicit AccessableStack(const AccessableStack<ItemType, AnotherAllocatorType> &from);
         explicit AccessableStack(const SelfType &from) = default;
         ~AccessableStack() override = default;
 

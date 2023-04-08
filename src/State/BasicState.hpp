@@ -87,20 +87,27 @@ namespace bvm
         /// @param index 索引
         /// @param callback 回调
         /// @return 本对象
-        SelfType &add_function(ntl::SizeT index,
+        SelfType &add_callback(ntl::SizeT index,
                                NativeCallback callback);
 
         /// @brief 调用一个函数
-        /// @param index 函数索引
+        /// @param index 索引
         /// @param arguments 参数
         /// @return 本对象
         SelfType &call_function(ntl::SizeT index,
-                                const FunctionArguments arguments = FunctionArguments());
+                                const FunctionArguments &arguments = FunctionArguments());
+
+        /// @brief 调用一个本地回调
+        /// @param index 索引
+        /// @param arguments 参数
+        /// @return 本对象
+        SelfType &call_callback(ntl::SizeT index,
+                                const FunctionArguments &arguments = FunctionArguments());
 
         /// @brief 中止当前函数
         /// @param result 返回值（如果当前函数需要，留空则不会返回）
         /// @return 本对象
-        SelfType &abort_current_function(std::optional<ntl::Int64> result);
+        SelfType &abort_current_function(std::optional<Memory> result);
 
         /// @brief 中止本状态
         /// @return 本对象
@@ -123,13 +130,39 @@ namespace bvm
         /// @return 本对象
         SelfType &stop();
 
-    protected:
-        virtual void execute_none(const Instruction &instruction);
-        virtual void execute_load(const Instruction &instruction);
-        virtual void execute_remove(const Instruction &instruction);
-        virtual void execute_store(const Instruction &instruction);
-        virtual void execute_move(const Instruction &instruction);
-        virtual void execute_native_call(const Instruction &instruction);
+    public:
+        Function &get_current_function();
+        const Function &get_current_function() const;
+
+        const Instruction &get_current_instruction();
+
+        void push_register_to_temp(Function &function,
+                                   CommandFlag::EnumType flag0,
+                                   CommandFlag::EnumType flag1);
+
+        void push_value_to_temp(Function &function,
+                                CommandFlag::EnumType flag0,
+                                const Value &argument);
+
+        void move_to_register(CommandFlag::EnumType flag1,
+                              const Value &argument);
+
+    public:
+        virtual void execute_none();
+        virtual void execute_load(CommandFlag::EnumType flag0,
+                                  CommandFlag::EnumType flag1,
+                                  const Value &argument);
+        virtual void execute_remove();
+        virtual void execute_store(CommandFlag::EnumType flag1,
+                                   const Value &argument);
+        virtual void execute_move(CommandFlag::EnumType flag0,
+                                  CommandFlag::EnumType flag1,
+                                  const Value &argument,
+                                  Value &rax);
+        virtual void execute_native_call(const Value &argument);
+        virtual void execute_make_temp(const Value &argument);
+        virtual void execute_call(const Value &argument);
+        virtual void execute_call_push();
     };
 
 } // namespace bvm

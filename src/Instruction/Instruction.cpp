@@ -6,13 +6,13 @@
 namespace bvm
 {
     Instruction::Instruction(Command::EnumType a_command,
-                             ntl::Int64 a_argument)
+                             const Value &a_argument)
         : command(a_command),
           argument(a_argument) {}
 
     Instruction::Instruction(Command::EnumType a_command,
                              CommandFlag::EnumType a_flag0,
-                             ntl::Int64 a_argument)
+                             const Value &a_argument)
         : command(a_command),
           flag0(a_flag0),
           argument(a_argument) {}
@@ -20,7 +20,7 @@ namespace bvm
     Instruction::Instruction(Command::EnumType a_command,
                              CommandFlag::EnumType a_flag0,
                              CommandFlag::EnumType a_flag1,
-                             ntl::Int64 a_argument)
+                             const Value &a_argument)
         : command(a_command),
           flag0(a_flag0),
           flag1(a_flag1),

@@ -52,6 +52,18 @@ namespace bvm
         return m_position >= size();
     }
 
+    MemoryManager &
+    Function::get_variables()
+    {
+        return m_variables;
+    }
+
+    MemoryStack &
+    Function::get_temp()
+    {
+        return m_temp;
+    }
+
     const Instruction &
     Function::get_instruction() const
     {

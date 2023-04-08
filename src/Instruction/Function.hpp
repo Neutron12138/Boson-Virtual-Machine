@@ -48,6 +48,9 @@ namespace bvm
         ntl::SizeT size() const;
         bool is_end() const;
 
+        MemoryManager &get_variables();
+        MemoryStack &get_temp();
+
     public:
         const Instruction &get_instruction() const;
         SelfType &forward(ntl::SizeT offset = 1);

@@ -79,7 +79,7 @@ namespace bvm
     }
 
     typename BasicState::SelfType &
-    BasicState::add_function(
+    BasicState::add_callback(
         ntl::SizeT index,
         NativeCallback callback)
     {
@@ -90,22 +90,33 @@ namespace bvm
     typename BasicState::SelfType &
     BasicState::call_function(
         ntl::SizeT index,
-        const FunctionArguments arguments)
+        const FunctionArguments &arguments)
     {
         m_call_stack.push(
             Function(
                 m_instruction_manager.get_item(index),
                 arguments));
+
+        return *this;
+    }
+
+    typename BasicState::SelfType &
+    BasicState::call_callback(
+        ntl::SizeT index,
+        const FunctionArguments &arguments)
+    {
+        m_native_manager.get_item(index)(*this, arguments);
         return *this;
     }
 
     typename BasicState::SelfType &
     BasicState::abort_current_function(
-        std::optional<ntl::Int64> result)
+        std::optional<Memory> result)
     {
         m_call_stack.pop();
         if (result.has_value())
-            m_global_memory.registers.rax.qword = *result;
+            m_global_memory.global_stack.push(*result);
+
         return *this;
     }
 
@@ -127,6 +138,46 @@ namespace bvm
             throw ntl::RuntimeException(
                 NTL_STRING("The state has been aborted and cannot continue execution"),
                 NTL_STRING("typename BasicState::SelfType &BasicState::execute()"));
+
+        try
+        {
+            execute(get_current_instruction());
+        }
+        catch (const ntl::CaughtException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::execute()"));
+        }
+
+        return *this;
+    }
+
+    typename BasicState::SelfType &
+    BasicState::execute(
+        const Instruction &instruction)
+    {
+        const Command::EnumType &command = instruction.command;
+        const CommandFlag::EnumType &flag0 = instruction.flag0;
+        const CommandFlag::EnumType &flag1 = instruction.flag1;
+        const ntl::Int64 &argument = instruction.argument;
+
+        if (command == Command::None)
+            execute_none();
+        else if (command == Command::Load)
+            execute_load(flag0, flag1, argument);
+        else if (command == Command::Remove)
+            execute_remove();
+        else if (command == Command::Store)
+            execute_store(flag1, argument);
+        else if (command == Command::Move)
+            execute_move(flag0, flag1, argument, m_global_memory.registers.rax);
+        else if (command == Command::NativeCall)
+            execute_native_call(argument);
+        else if (command == Command::MakeTemp)
+            execute_make_temp(argument);
+        else if (command == Command::Call)
+            execute_call(argument);
 
         return *this;
     }
@@ -153,40 +204,209 @@ namespace bvm
         return *this;
     }
 
-    void
-    BasicState::execute_none(
-        const Instruction &instruction) {}
-
-    void
-    BasicState::execute_load(
-        const Instruction &instruction)
+    Function &
+    BasicState::get_current_function()
     {
+        try
+        {
+            return m_call_stack.top();
+        }
+        catch (const ntl::OutOfRangeException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("Function &BasicState::get_current_function()"));
+        }
+    }
+
+    const Function &
+    BasicState::get_current_function() const
+    {
+        try
+        {
+            return m_call_stack.top();
+        }
+        catch (const ntl::OutOfRangeException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("const Function &BasicState::get_current_function() const"));
+        }
+    }
+
+    const Instruction &
+    BasicState::get_current_instruction()
+    {
+        try
+        {
+            return get_current_function().get_instruction();
+        }
+        catch (const ntl::OutOfRangeException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("const Instruction &BasicState::get_current_instruction()"));
+        }
     }
 
     void
-    BasicState::execute_remove(
-        const Instruction &instruction)
+    BasicState::push_register_to_temp(
+        Function &function,
+        CommandFlag::EnumType flag0,
+        CommandFlag::EnumType flag1)
     {
+        auto push = [&](const Value &reg)
+        {
+            if (flag0 == CommandFlag::Byte)
+                function.get_temp().push(Memory().set(reg.byte));
+            else if (flag0 == CommandFlag::Word)
+                function.get_temp().push(Memory().set(reg.word));
+            else if (flag0 == CommandFlag::DWord)
+                function.get_temp().push(Memory().set(reg.dword));
+            else if (flag0 == CommandFlag::QWord)
+                function.get_temp().push(Memory().set(reg.qword));
+        };
+
+        if (flag1 == CommandFlag::RAX)
+            push(m_global_memory.registers.rax);
+        else if (flag1 == CommandFlag::RBX)
+            push(m_global_memory.registers.rbx);
+        else if (flag1 == CommandFlag::RCX)
+            push(m_global_memory.registers.rcx);
+        else if (flag1 == CommandFlag::RDX)
+            push(m_global_memory.registers.rdx);
+    }
+
+    void
+    BasicState::push_value_to_temp(
+        Function &function,
+        CommandFlag::EnumType flag0,
+        const Value &argument)
+    {
+        if (flag0 == CommandFlag::Byte)
+            function.get_temp().push(Memory());
+        else if (flag0 == CommandFlag::Word)
+            function.get_temp().push(Memory());
+        else if (flag0 == CommandFlag::DWord)
+            function.get_temp().push(Memory());
+        else if (flag0 == CommandFlag::QWord)
+            function.get_temp().push(Memory());
+    }
+
+    void
+    BasicState::move_to_register(
+        CommandFlag::EnumType flag1,
+        const Value &argument)
+    {
+        if (flag1 == CommandFlag::RAX)
+            m_global_memory.registers.rax.qword = argument;
+        else if (flag1 == CommandFlag::RBX)
+            m_global_memory.registers.rbx.qword = argument;
+        else if (flag1 == CommandFlag::RCX)
+            m_global_memory.registers.rcx.qword = argument;
+        else if (flag1 == CommandFlag::RDX)
+            m_global_memory.registers.rdx.qword = argument;
+    }
+
+    void BasicState::execute_none() { get_current_function().backward(); }
+
+    void
+    BasicState::execute_load(
+        CommandFlag::EnumType flag0,
+        CommandFlag::EnumType flag1,
+        const Value &argument)
+    {
+        Function &function = get_current_function();
+
+        if (flag1 == CommandFlag::RAX ||
+            flag1 == CommandFlag::RBX ||
+            flag1 == CommandFlag::RCX ||
+            flag1 == CommandFlag::RDX)
+            push_register_to_temp(function, flag0, flag1);
+        else if (flag1 == CommandFlag::None)
+
+            function.backward();
+    }
+
+    void
+    BasicState::execute_remove()
+    {
+        Function &function = get_current_function();
+
+        function.get_temp().pop();
+
+        function.backward();
     }
 
     void
     BasicState::execute_store(
-        const Instruction &instruction)
+        CommandFlag::EnumType flag1,
+        const Value &argument)
     {
+        Function &function = get_current_function();
+
+        function.backward();
     }
 
     void
     BasicState::execute_move(
-        const Instruction &instruction)
+        CommandFlag::EnumType flag0,
+        CommandFlag::EnumType flag1,
+        const Value &argument,
+        Value &rax)
     {
+        Function &function = get_current_function();
+
+        if (flag1 == CommandFlag::RAX ||
+            flag1 == CommandFlag::RBX ||
+            flag1 == CommandFlag::RCX ||
+            flag1 == CommandFlag::RDX)
+            move_to_register(flag1, argument);
+
+        function.backward();
     }
 
     void
     BasicState::execute_native_call(
-        const Instruction &instruction)
+        const Value &argument)
     {
-        m_native_manager.get_item(instruction.argument)(*this, m_call_arguments);
-        m_call_arguments.clear();
+        Function &function = get_current_function();
+
+        call_callback(argument, m_call_arguments);
+
+        function.backward();
+    }
+
+    void
+    BasicState::execute_make_temp(
+        const Value &argument)
+    {
+        Function &function = get_current_function();
+
+        function.get_temp().push(Memory().reallocate(argument));
+
+        function.backward();
+    }
+
+    void
+    BasicState::execute_call(
+        const Value &argument)
+    {
+        Function &function = get_current_function();
+
+        call_function(argument, m_call_arguments);
+
+        function.backward();
+    }
+
+    void
+    BasicState::execute_call_push()
+    {
+        Function &function = get_current_function();
+
+        m_call_arguments.push(function.get_temp().pop());
+
+        function.backward();
     }
 
 } // namespace bvm

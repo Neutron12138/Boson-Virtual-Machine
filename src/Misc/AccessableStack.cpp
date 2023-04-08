@@ -6,9 +6,20 @@
 namespace bvm
 {
     template <typename m_ItemType, typename m_AllocatorType>
+    template <typename AnotherAllocatorType>
     AccessableStack<m_ItemType, m_AllocatorType>::AccessableStack(
-        const typename AccessableStack<m_ItemType, m_AllocatorType>::ItemContainer &container)
+        const std::vector<
+            typename AccessableStack<m_ItemType, m_AllocatorType>::ItemType,
+            AnotherAllocatorType> &container)
         : m_container(container) {}
+
+    template <typename m_ItemType, typename m_AllocatorType>
+    template <typename AnotherAllocatorType>
+    AccessableStack<m_ItemType, m_AllocatorType>::AccessableStack(
+        const AccessableStack<
+            typename AccessableStack<m_ItemType, m_AllocatorType>::ItemType,
+            AnotherAllocatorType> &from)
+        : m_container(from.get_container()) {}
 
     template <typename m_ItemType, typename m_AllocatorType>
     typename AccessableStack<m_ItemType, m_AllocatorType>::ItemType &

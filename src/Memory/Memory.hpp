@@ -26,6 +26,8 @@ namespace bvm
         Memory() = default;
         explicit Memory(ntl::SizeT size);
         explicit Memory(const MemoryHolder &holder);
+        template <typename IteratorType>
+        explicit Memory(const IteratorType &begin, const IteratorType &end);
         explicit Memory(const SelfType &from) = default;
         ~Memory() override = default;
 
@@ -45,6 +47,9 @@ namespace bvm
         const ReturnType &get(ntl::SizeT offset = 0) const;
 
         SelfType &set_holder(const MemoryHolder &holder);
+
+        template <typename DataType>
+        SelfType &set(const DataType &data);
 
     public:
         /// @brief 重新分配内存，会清空原有的值
