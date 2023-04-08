@@ -75,7 +75,8 @@ namespace bvm
     Memory::set(
         const DataType &data)
     {
-        memcpy(m_holder.data(), &data, sizeof(data));
+        reallocate(sizeof(DataType));
+        memcpy(m_holder.data(), &data, sizeof(DataType));
         return *this;
     }
 

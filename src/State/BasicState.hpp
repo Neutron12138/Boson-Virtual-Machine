@@ -107,45 +107,46 @@ namespace bvm
         /// @brief 中止当前函数
         /// @param result 返回值（如果当前函数需要，留空则不会返回）
         /// @return 本对象
-        SelfType &abort_current_function(std::optional<Memory> result);
+        virtual SelfType &abort_current_function(std::optional<Memory> result);
 
         /// @brief 中止本状态
         /// @return 本对象
-        SelfType &abort_self();
+        virtual SelfType &abort_self();
 
     public:
         /// @brief 执行一条指令
         /// @return 本对象
-        SelfType &execute();
+        virtual SelfType &execute();
 
         /// @brief 执行一条指令
         /// @return 本对象
-        SelfType &execute(const Instruction &instruction);
+        virtual SelfType &execute(const Instruction &instruction);
 
         /// @brief 运行本状态
         /// @return 本对象
-        SelfType &run();
+        virtual SelfType &run();
 
         /// @brief 停止本状态
         /// @return 本对象
-        SelfType &stop();
+        virtual SelfType &stop();
 
     public:
         Function &get_current_function();
         const Function &get_current_function() const;
 
-        const Instruction &get_current_instruction();
+        const Instruction &get_current_instruction() const;
 
-        void push_register_to_temp(Function &function,
-                                   CommandFlag::EnumType flag0,
-                                   CommandFlag::EnumType flag1);
+    public:
+        virtual void push_register_to_temp(Function &function,
+                                           CommandFlag::EnumType flag0,
+                                           CommandFlag::EnumType flag1);
 
-        void push_value_to_temp(Function &function,
-                                CommandFlag::EnumType flag0,
-                                const Value &argument);
+        virtual void push_value_to_temp(Function &function,
+                                        CommandFlag::EnumType flag0,
+                                        const Value &argument);
 
-        void move_to_register(CommandFlag::EnumType flag1,
-                              const Value &argument);
+        virtual void move_to_register(CommandFlag::EnumType flag1,
+                                      const Value &argument);
 
     public:
         virtual void execute_none();
@@ -164,6 +165,12 @@ namespace bvm
         virtual void execute_call(const Value &argument);
         virtual void execute_call_push();
     };
+
+    /// @brief 状态指针
+    using StatePointer = ntl::SharedPointer<BasicState>;
+
+    /// @brief 状态管理器
+    using StateManager = IndexedManager<StatePointer>;
 
 } // namespace bvm
 

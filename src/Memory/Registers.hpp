@@ -32,7 +32,7 @@ namespace bvm
 
 namespace ntl
 {
-    ntl::Serialization serialize(const bvm::Registers &object);
+    ntl::Serialization serialize(const bvm::Registers &registers);
 
 } // namespace ntl
 

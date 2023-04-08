@@ -52,6 +52,13 @@ namespace bvm
     }
 
     template <typename m_ItemType, typename m_ComparerType, typename m_AllocatorType>
+    typename IndexedManager<m_ItemType, m_ComparerType, m_AllocatorType>::ItemStorage &
+    IndexedManager<m_ItemType, m_ComparerType, m_AllocatorType>::get_storage()
+    {
+        return m_storage;
+    }
+
+    template <typename m_ItemType, typename m_ComparerType, typename m_AllocatorType>
     const typename IndexedManager<m_ItemType, m_ComparerType, m_AllocatorType>::ItemStorage &
     IndexedManager<m_ItemType, m_ComparerType, m_AllocatorType>::get_storage() const
     {

@@ -22,5 +22,8 @@
 #include "Instruction/DefaultNativeCallbacks.hpp"
 
 #include "State/BasicState.hpp"
+#include "State/StateDebugger.hpp"
+
+#include "Executer/VirtualMachine.hpp"
 
 #endif

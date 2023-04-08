@@ -47,6 +47,8 @@ namespace bvm
 
     public:
         SelfType &set_storage(const ItemStorage &storage);
+
+        ItemStorage &get_storage();
         const ItemStorage &get_storage() const;
 
         bool is_index_existed(ntl::SizeT index) const;

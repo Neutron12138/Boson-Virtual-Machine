@@ -8,8 +8,10 @@ int main()
 {
     try
     {
-        bvm::BasicState state;
+        bvm::VirtualMachine vm;
+        vm.create_state<bvm::BasicState>(0);
 
+        bvm::BasicState &state = *vm.get_state(0);
         state.add_callback(0, my_func);
         state.add_function(
             0,
@@ -22,11 +24,7 @@ int main()
                                  bvm::Value(0)),
             });
 
-        bvm::StateDebugger<bvm::BasicState> debugger(state);
-        debugger.call_function(0).run();
-        debugger.print_current_instruction().execute();
-        debugger.print_current_instruction().execute();
-        debugger.print_current_instruction().execute();
+        state.call_function(0).run().execute().execute();
     }
     catch (const ntl::CaughtException &exception)
     {
@@ -35,10 +33,6 @@ int main()
     catch (const ntl::Exception &exception)
     {
         std::cout << exception << std::endl;
-    }
-    catch (const std::exception &exception)
-    {
-        std::cout << exception.what() << std::endl;
     }
 
     return 0;

@@ -92,10 +92,19 @@ namespace bvm
         ntl::SizeT index,
         const FunctionArguments &arguments)
     {
-        m_call_stack.push(
-            Function(
-                m_instruction_manager.get_item(index),
-                arguments));
+        try
+        {
+            m_call_stack.push(
+                Function(
+                    m_instruction_manager.get_item(index),
+                    arguments));
+        }
+        catch (const ntl::OutOfRangeException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::call_function(ntl::SizeT index,const FunctionArguments &arguments)"));
+        }
 
         return *this;
     }
@@ -105,7 +114,29 @@ namespace bvm
         ntl::SizeT index,
         const FunctionArguments &arguments)
     {
-        m_native_manager.get_item(index)(*this, arguments);
+        try
+        {
+            m_native_manager.get_item(index)(*this, arguments);
+        }
+        catch (const ntl::CaughtException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::call_callback(ntl::SizeT index,const FunctionArguments &arguments)"));
+        }
+        catch (const ntl::Exception &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::call_callback(ntl::SizeT index,const FunctionArguments &arguments)"));
+        }
+        catch (const std::exception &exception)
+        {
+            throw ntl::Exception(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::call_callback(ntl::SizeT index,const FunctionArguments &arguments)"));
+        }
+
         return *this;
     }
 
@@ -113,9 +144,12 @@ namespace bvm
     BasicState::abort_current_function(
         std::optional<Memory> result)
     {
-        m_call_stack.pop();
-        if (result.has_value())
-            m_global_memory.global_stack.push(*result);
+        if (m_call_stack.size() > 0)
+        {
+            m_call_stack.pop();
+            if (result.has_value())
+                m_global_memory.global_stack.push(*result);
+        }
 
         return *this;
     }
@@ -144,6 +178,12 @@ namespace bvm
             execute(get_current_instruction());
         }
         catch (const ntl::CaughtException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("typename BasicState::SelfType &BasicState::execute()"));
+        }
+        catch (const ntl::Exception &exception)
         {
             throw ntl::CaughtException(
                 exception,
@@ -178,6 +218,8 @@ namespace bvm
             execute_make_temp(argument);
         else if (command == Command::Call)
             execute_call(argument);
+        else if (command == Command::CallPush)
+            execute_call_push();
 
         return *this;
     }
@@ -235,7 +277,7 @@ namespace bvm
     }
 
     const Instruction &
-    BasicState::get_current_instruction()
+    BasicState::get_current_instruction() const
     {
         try
         {
@@ -245,7 +287,7 @@ namespace bvm
         {
             throw ntl::CaughtException(
                 exception,
-                NTL_STRING("const Instruction &BasicState::get_current_instruction()"));
+                NTL_STRING("const Instruction &BasicState::get_current_instruction() const"));
         }
     }
 
@@ -284,13 +326,13 @@ namespace bvm
         const Value &argument)
     {
         if (flag0 == CommandFlag::Byte)
-            function.get_temp().push(Memory());
+            function.get_temp().push(Memory().set(argument.byte));
         else if (flag0 == CommandFlag::Word)
-            function.get_temp().push(Memory());
+            function.get_temp().push(Memory().set(argument.word));
         else if (flag0 == CommandFlag::DWord)
-            function.get_temp().push(Memory());
+            function.get_temp().push(Memory().set(argument.dword));
         else if (flag0 == CommandFlag::QWord)
-            function.get_temp().push(Memory());
+            function.get_temp().push(Memory().set(argument.qword));
     }
 
     void
@@ -324,8 +366,9 @@ namespace bvm
             flag1 == CommandFlag::RDX)
             push_register_to_temp(function, flag0, flag1);
         else if (flag1 == CommandFlag::None)
+            push_value_to_temp(function, flag0, argument);
 
-            function.backward();
+        function.backward();
     }
 
     void
@@ -372,7 +415,28 @@ namespace bvm
     {
         Function &function = get_current_function();
 
-        call_callback(argument, m_call_arguments);
+        try
+        {
+            call_callback(argument, m_call_arguments);
+        }
+        catch (const ntl::CaughtException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("voidBasicState::execute_native_call(const Value &argument)"));
+        }
+        catch (const ntl::Exception &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("void BasicState::execute_native_call(const Value &argument)"));
+        }
+        catch (const std::exception &exception)
+        {
+            throw ntl::Exception(
+                exception,
+                NTL_STRING("void BasicState::execute_native_call(const Value &argument)"));
+        }
 
         function.backward();
     }
@@ -404,7 +468,16 @@ namespace bvm
     {
         Function &function = get_current_function();
 
-        m_call_arguments.push(function.get_temp().pop());
+        try
+        {
+            m_call_arguments.push(function.get_temp().pop());
+        }
+        catch (const ntl::OutOfRangeException &exception)
+        {
+            throw ntl::CaughtException(
+                exception,
+                NTL_STRING("void BasicState::execute_call_push()"));
+        }
 
         function.backward();
     }
