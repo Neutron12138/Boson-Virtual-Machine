@@ -44,6 +44,12 @@ namespace bvm
         return m_holder.data();
     }
 
+    ntl::SizeT
+    Memory::size() const
+    {
+        return m_holder.size();
+    }
+
     template <typename ReturnType>
     ReturnType &
     Memory::get(

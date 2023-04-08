@@ -2,7 +2,7 @@
 #include "../../src/BVM.hpp"
 #include "../../src/BVM.cpp"
 
-void my_func(bvm::BasicState &state, const bvm::FunctionArguments &arguments = bvm::FunctionArguments());
+void my_func(bvm::BasicState &state, bvm::FunctionArguments arguments);
 
 int main()
 {
@@ -44,7 +44,7 @@ int main()
     return 0;
 }
 
-void my_func(bvm::BasicState &state, const bvm::FunctionArguments &arguments)
+void my_func(bvm::BasicState &state, bvm::FunctionArguments arguments)
 {
     std::cout << "Hello World!" << std::endl
               << "argument:" << arguments[0].get<ntl::Int64>() << std::endl;

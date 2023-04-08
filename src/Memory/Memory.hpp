@@ -41,6 +41,8 @@ namespace bvm
         ntl::Byte *get_data();
         const ntl::Byte *get_data() const;
 
+        ntl::SizeT size() const;
+
         template <typename ReturnType>
         ReturnType &get(ntl::SizeT offset = 0);
         template <typename ReturnType>

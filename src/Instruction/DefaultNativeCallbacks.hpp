@@ -7,7 +7,19 @@ namespace bvm
 {
     namespace DefaultNativeCallbacks
     {
-        void print(BasicState &state, const FunctionArguments &arguments);
+        enum PrintEnum
+        {
+            StdOut = 0,
+            StdLog,
+            StdError,
+            File,
+
+            SingleChar = 0,
+            WideChar,
+            Number,
+        };
+
+        void print(BasicState &state, FunctionArguments arguments);
 
     } // namespace DefaultNativeCallbacks
 

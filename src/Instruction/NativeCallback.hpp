@@ -37,7 +37,7 @@ namespace bvm
         */
 
     /// @brief 本地回调函数类型
-    using NativeCallbackType = void(BasicState &, const FunctionArguments &);
+    using NativeCallbackType = void(BasicState &, FunctionArguments);
 
     /// @brief 本地回调
     using NativeCallback = std::function<NativeCallbackType>;
