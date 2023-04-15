@@ -54,6 +54,17 @@ namespace bvm
     /// @brief 指令管理器
     using InstructionManager = IndexedManager<InstructionContainer>;
 
+    // 资源
+
+    /// @brief 指令资源
+    using InstructionResource = Resource<Instruction>;
+
+    /// @brief 指令容器资源
+    using InstructionContainerResource = Resource<InstructionContainer>;
+
+    /// @brief 指令管理器资源
+    using InstructionManagerResource = Resource<InstructionManager>;
+
 } // namespace bvm
 
 namespace ntl

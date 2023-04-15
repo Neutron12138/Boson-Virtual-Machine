@@ -5,6 +5,7 @@
 #include <ntl/NTL.hpp>
 #include "../Misc/IndexedManager.hpp"
 #include "../Misc/AccessableStack.hpp"
+#include "../Misc/Resource.hpp"
 
 namespace bvm
 {
@@ -90,6 +91,26 @@ namespace bvm
 
     /// @brief 函数参数
     using FunctionArguments = MemoryStack;
+
+    // 资源
+
+    /// @brief 内存资源
+    using MemoryResource = Resource<Memory>;
+
+    /// @brief 内存管理器资源
+    using MemoryManagerResource = Resource<MemoryManager>;
+
+    /// @brief 内存栈资源
+    using MemoryStackResource = Resource<MemoryManager>;
+
+    /// @brief 堆资源
+    using HeapResource = Resource<Heap>;
+
+    /// @brief 缓存栈资源
+    using TempStackResource = Resource<TempStack>;
+
+    /// @brief 函数参数资源
+    using FunctionArgumentsResource = Resource<FunctionArguments>;
 
 } // namespace bvm
 

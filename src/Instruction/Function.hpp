@@ -18,21 +18,21 @@ namespace bvm
 
     protected:
         /// @brief 指令
-        InstructionContainer m_instructions;
+        InstructionContainerResource m_instructions;
 
         /// @brief 变量
-        MemoryManager m_variables;
+        MemoryManagerResource m_variables;
 
         /// @brief 缓存
-        TempStack m_temp;
+        TempStackResource m_temp;
 
         /// @brief 执行位置
         ntl::SizeT m_position = 0;
 
     public:
-        explicit Function(const InstructionContainer &instructions);
-        explicit Function(const InstructionContainer &instructions,
-                          const MemoryStack &arguments);
+        explicit Function(const InstructionContainerResource &instructions);
+        explicit Function(const InstructionContainerResource &instructions,
+                          const MemoryStackResource &arguments);
         explicit Function(const SelfType &from) = default;
         ~Function() override = default;
 
@@ -40,16 +40,16 @@ namespace bvm
         SelfType &operator=(const SelfType &from) = default;
 
     public:
-        const InstructionContainer &get_instructions() const;
-        const MemoryManager &get_variables() const;
-        const MemoryStack &get_temp() const;
+        const InstructionContainerResource &get_instructions() const;
+        const MemoryManagerResource &get_variables() const;
+        const MemoryStackResource &get_temp() const;
         ntl::SizeT get_position() const;
 
         ntl::SizeT size() const;
         bool is_end() const;
 
-        MemoryManager &get_variables();
-        MemoryStack &get_temp();
+        MemoryManagerResource &get_variables();
+        MemoryStackResource &get_temp();
 
     public:
         const Instruction &get_instruction() const;

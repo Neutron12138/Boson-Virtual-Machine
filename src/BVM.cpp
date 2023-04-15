@@ -7,6 +7,7 @@
 
 #include "Misc/IndexedManager.cpp"
 #include "Misc/AccessableStack.cpp"
+#include "Misc/Resource.cpp"
 
 #include "Memory/Memory.cpp"
 #include "Memory/Value.cpp"

@@ -3,6 +3,7 @@
 
 #include <ntl/NTL.hpp>
 #include "../Misc/IndexedManager.hpp"
+#include "../Misc/Resource.hpp"
 
 namespace bvm
 {
@@ -67,6 +68,14 @@ namespace bvm
 
     /// @brief 统一存储区管理器
     using UniformManager = IndexedManager<Uniform>;
+
+    // 资源
+
+    /// @brief 统一变量资源
+    using UniformResource = Resource<Uniform>;
+
+    /// @brief 统一存储区管理器资源
+    using UniformManagerResource = Resource<UniformManager>;
 
 } // namespace bvm
 

@@ -17,22 +17,22 @@ namespace bvm
 
     public:
         /// @brief 静态变量
-        MemoryManager static_variables;
+        MemoryManagerResource static_variables;
 
         /// @brief 全局变量
-        MemoryManager global_variables;
+        MemoryManagerResource global_variables;
 
         /// @brief 堆
-        Heap heap;
+        HeapResource heap;
 
         /// @brief 全局栈
-        MemoryStack global_stack;
+        MemoryStackResource global_stack;
 
         /// @brief 寄存器
-        Registers registers;
+        RegistersResource registers;
 
         /// @brief 统一变量
-        UniformManager uniforms;
+        UniformManagerResource uniforms;
 
     public:
         GlobalMemory() = default;

@@ -83,7 +83,9 @@ namespace bvm
         ntl::SizeT index,
         NativeCallback callback)
     {
-        m_native_manager.add_item(index, callback);
+        m_native_manager.add_item(
+            index,
+            NativeCallback(callback));
         return *this;
     }
 
@@ -116,7 +118,7 @@ namespace bvm
     {
         try
         {
-            m_native_manager.get_item(index)(*this, arguments);
+            m_native_manager.get_item(index)(*this, FunctionArguments(arguments));
         }
         catch (const ntl::CaughtException &exception)
         {

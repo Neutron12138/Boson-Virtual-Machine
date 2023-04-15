@@ -6,6 +6,7 @@
 #include "Misc/IndexedManager.hpp"
 #include "Misc/AccessableStack.hpp"
 #include "Misc/EnumUtils.hpp"
+#include "Misc/Resource.hpp"
 
 #include "Memory/Memory.hpp"
 #include "Memory/Value.hpp"

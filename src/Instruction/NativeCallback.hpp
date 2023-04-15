@@ -9,6 +9,7 @@
 namespace bvm
 {
     class BasicState;
+    class FunctionArguments;
 
     /*
         /// @brief 本地回调
@@ -34,7 +35,7 @@ namespace bvm
 
         /// @brief 本地回调管理器
         using NativeCallbackManager = IndexedManager<NativeCallbackPointer>;
-        */
+    */
 
     /// @brief 本地回调函数类型
     using NativeCallbackType = void(BasicState &, FunctionArguments);

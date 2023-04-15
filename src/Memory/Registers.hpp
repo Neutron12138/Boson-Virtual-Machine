@@ -3,6 +3,7 @@
 
 #include <ntl/NTL.hpp>
 #include "Value.hpp"
+#include "../Misc/Resource.hpp"
 
 namespace bvm
 {
@@ -27,6 +28,8 @@ namespace bvm
     public:
         SelfType &operator=(const SelfType &from) = default;
     };
+
+    using RegistersResource = Resource<Registers>;
 
 } // namespace bvm
 
